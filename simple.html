@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
+  <title>アニメ鑑賞</title>
+  <style>
+    /* この中にcssをかけます */
+  </style>
+</head>
+
+<body>
+  <!-- ブラウザの画面に見える内容 -->
+  <header>名シーン観賞会</header>
+  
+  <!-- 動画選択 -->
+  <div class="animes">
+  <button id="anime">あなたにおすすめのアニメが出るよ</button>
+    <iframe id="onepiece" width="560" height="315" src="https://www.youtube.com/embed/3VdqvSKFzE8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe id="kimetu" width="560" height="315" src="https://www.youtube.com/embed/M250yIw3Uts" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe id="major" width="560" height="315" src="https://www.youtube.com/embed/FrBTAJs76Mw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <div id="out"></div>
+  </div>
+
+  <div class="">
+    <!-- テキストエリア -->
+    <textarea name="" id="text" cols="100" rows="10" placeholder="コメントを共有しよう！"></textarea>
+    <button id="send">送信</button>
+  </div>
+
+  <div>
+    <!-- 保存されたデータが表示される箇所 -->
+    <div id="output"></div>
+  </div>　　　　
+
+  <!--/ ブラウザの画面に見える内容 -->
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!--** 以下Firebase **-->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <!-- ここにfirebaseのscriptを貼り付ける -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyDSpJkB9o3YWmSjSIEHog_swrxUTD80gSQ",
+      authDomain: "gsjs3-778af.firebaseapp.com",
+      databaseURL: "https://gsjs3-778af.firebaseio.com",
+      projectId: "gsjs3-778af",
+      storageBucket: "gsjs3-778af.appspot.com",
+      messagingSenderId: "176827823326",
+      appId: "1:176827823326:web:c791aa43b78cda04aa7e4f"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    //firebaseのデーターベース（保存させる場所）を使いますよと言うjsのコードを貼り付ける
+    // xxxxxスクリプトを貼り付ける
+    const newPostRef = firebase.database().ref();
+
+    // ここから下にjqueryの処理を書いて練習します
+    
+    // 送信ボタンをクリックされたら次の処理をする
+    $(function(){
+      $("#onepiece").hide();
+      $("#major").hide();
+      $("#kimetu").hide();
+      $("#anime").on("click",function(){
+        var comp=Math.floor(Math.random() * 3);
+        if (comp==0){
+        $("#onepiece").fadeOut();
+        $("#kimetu").fadeOut();
+        
+      //   $("#major").show();
+      //   newPostRef.push({
+      //     movie: $("major").val(),
+      //   });
+      //   newPostRef.on("child_added", function (data) {
+      //   let v=data.val();
+      //   console.log(v);
+      //   let str = `<p>${v.major}</p>`;
+      //   $("#out").show(str);
+      // });
+    
+      }else if(comp==1){
+      $("#onepiece").show();
+      // newPostRef.push({
+      //     movie: $("#onepiece").val(),
+      //   });
+      // newPostRef.on("child_added", function (data) {
+      //   let v=data.val();
+      //   console.log(v);
+      //   let str = `<p>${v.onepiece}</p>`;
+      //   $("#out").show(str);
+      // });
+      $("#kimetu").fadeOut();
+      $("#major").fadeOut();
+    }else if(comp==2){
+      $("#kimetu").show();
+      // newPostRef.push({
+      //   movie: $("#kimetu").val(),
+      //   });
+      // newPostRef.on("child_added", function (data) {
+      //   let v=data.val();
+      //   console.log(v);
+      //   let str = `<p>${v.onepiece}</p>`;
+      //   $("#out").show(str);
+      // });
+      $("#onepiece").fadeOut();
+      $("#major").fadeOut();
+    }
+  })
+})
+
+    $("#send").on("click", function () {
+          // データを登録で送る
+          newPostRef.push({
+            text: $("#text").val(), //テキストエリア
+          })
+          $("#username").val(""); //空にする
+        });
+
+    // 受信処理
+    newPostRef.on("child_added", function (data) {
+      //ここに保存されたデータが全て入ってくる
+      // function (data)のdataにfirebaseのデータが入ってくる
+      let v=data.val();
+      // let k = data.key; //今回は使いません
+
+      //console.logで受信=firebaseに登録されている中身を確認しよう！
+      console.log(v);
+      //テンプレートリテラル `` を活用して変数にhtmlを埋め込もう！ 
+      let str = `<p>${v.text}</p>`;
+
+      // ここでデータをhtmlに埋め込む prependには変数を埋め込もう！
+      $("#output").prepend(str);
+    });
+
+    $("xxx").on("keydown", function (event) {
+
+      // eventの中身をconsole.logでみてみよう！
+    })
+  </script>
+</body>
+
+</html>
